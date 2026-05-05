@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Code Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Monaco Editor from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landingPage" class="landing-container">
+        <div class="landing-card">
+            <div class="landing-header">
+                <h1>🚀 Collaborative Code Editor</h1>
+                <p>Code together in real-time</p>
+            </div>
+            <form id="joinForm" class="join-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your name" required maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="roomCode">Room Code</label>
+                    <input type="text" id="roomCode" placeholder="Enter room code (auto-generated if new)" maxlength="20">
+                </div>
+                <button type="submit" class="btn btn-primary">Join or Create Room</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Editor Page -->
+    <div id="editorPage" class="editor-container" style="display: none;">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="room-info">
+                    <span id="roomName" class="room-name"></span>
+                    <span class="separator">|</span>
+                    <span id="usersCount" class="users-count">1 user</span>
+                </div>
+            </div>
+            <div class="top-bar-center">
+                <select id="languageSelector" class="language-selector">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="php">PHP</option>
+                    <option value="typescript">TypeScript</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="sql">SQL</option>
+                </select>
+            </div>
+            <div class="top-bar-right">
+                <button id="runBtn" class="btn btn-success">▶ Run Code</button>
+                <button id="saveSnapshotBtn" class="btn btn-info">💾 Save Snapshot</button>
+                <button id="historyBtn" class="btn btn-secondary">📜 History</button>
+                <div id="userAvatars" class="user-avatars"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Editor -->
+            <div class="editor-wrapper">
+                <div id="monaco-editor" class="editor"></div>
+                <!-- Remote Cursors -->
+                <div id="remoteCursors" class="remote-cursors"></div>
+            </div>
+
+            <!-- Chat Sidebar -->
+            <div class="sidebar chat-sidebar">
+                <div class="sidebar-header">
+                    <h3>💬 Chat</h3>
+                    <button id="toggleChat" class="toggle-btn">−</button>
+                </div>
+                <div id="chatMessages" class="chat-messages"></div>
+                <div class="chat-input-area">
+                    <form id="chatForm">
+                        <input 
+                            type="text" 
+                            id="chatInput" 
+                            placeholder="Type message..." 
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="btn btn-sm">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Panel -->
+        <div class="output-panel">
+            <div class="output-header">
+                <h3>📤 Output</h3>
+                <button id="toggleOutput" class="toggle-btn">−</button>
+            </div>
+            <div id="outputContent" class="output-content">
+                <div class="placeholder">Run code to see output...</div>
+            </div>
+        </div>
+
+        <!-- History Drawer -->
+        <div id="historyDrawer" class="history-drawer">
+            <div class="history-header">
+                <h3>📜 Version History</h3>
+                <button id="closeHistory" class="close-btn">×</button>
+            </div>
+            <div id="snapshotsList" class="snapshots-list"></div>
+        </div>
+
+        <!-- Overlay for history drawer -->
+        <div id="historyOverlay" class="overlay"></div>
+    </div>
+
+    <script src="client.js"></script>
+</body>
+</html>

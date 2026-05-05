@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventFlow - Professional Event Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --secondary: #EC4899;
+            --accent: #F59E0B;
+            --bg-primary: #1F1F2E;
+            --bg-secondary: #2A2A3E;
+            --bg-tertiary: #3A3A4E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0AEC0;
+            --border-color: #404060;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #16213E 100%);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* ===== LOGIN PAGE ===== */
+        #loginPage {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1F1F2E 0%, #2D1B69 50%, #1F1F2E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(42, 42, 62, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 50px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: var(--bg-tertiary);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .role-option {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary);
+        }
+
+        .role-option.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-color: var(--primary);
+            color: var(--text-primary);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .demo-accounts {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(139, 92, 246, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .demo-accounts h3 {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .account-item {
+            margin-bottom: 12px;
+            font-size: 0.85em;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+        }
+
+        .account-item strong {
+            color: var(--primary);
+        }
+
+        /* ===== DASHBOARD LAYOUT ===== */
+        .dashboard-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .dashboard-wrapper.active {
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, #1F1F2E 100%);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            font-size: 1.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--text-primary);
+            border-left-color: var(--primary);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.05) 100%);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .menu-icon {
+            font-size: 1.3em;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--danger);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-footer:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            background: rgba(42, 42, 62, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .greeting {
+            font-size: 1.2em;
+            color: var(--text-primary);
+        }
+
+        .greeting .username {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+        }
+
+        /* ===== ADMIN DASHBOARD ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .table-container {
+            background: rgba(42, 42, 62, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tbody td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        tbody tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .badge.pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .badge.published {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.85em;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: var(--text-primary);
+        }
+
+        /* ===== PARTICIPANT DASHBOARD ===== */
+        .registrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .registration-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.08) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .registration-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.2);
+        }
+
+        .event-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .event-detail {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .reg-number {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .qr-code-display {
+            width: 150px;
+            height: 150px;
+            background: var(--bg-primary);
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.8em;
+            text-align: center;
+            margin: 15px auto;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--text-primary);
+        }
+
+        .modal-btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .sidebar-menu {
+                display: flex;
+                gap: 10px;
+            }
+
+            .menu-item {
+                white-space: nowrap;
+            }
+
+            .sidebar-footer {
+                margin-left: auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .registrations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- LOGIN PAGE -->
+        <div id="loginPage" class="page">
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>🎯 EventFlow</h1>
+                    <p>Professional Event Registration System</p>
+                </div>
+
+                <div class="role-selector">
+                    <button class="role-option active" onclick="selectRole('admin')">
+                        👤 Admin
+                    </button>
+                    <button class="role-option" onclick="selectRole('participant')">
+                        🎫 Participant
+                    </button>
+                </div>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="emailInput" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="passwordInput" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="login-button">Login</button>
+                </form>
+
+                <div class="demo-accounts">
+                    <h3>Demo Accounts</h3>
+                    <div class="account-item">
+                        <strong>Admin:</strong> rajuchaswik@gmail.com / Raju@2006
+                    </div>
+                    <div class="account-item">
+                        <strong>Participant:</strong> p1@events.local / password123
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dashboardPage" class="dashboard-wrapper">
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    🎯 EventFlow
+                </div>
+
+                <div class="sidebar-menu">
+                    <!-- ADMIN MENU -->
+                    <div id="adminMenu" style="display: none; width: 100%;">
+                        <div class="menu-item active" onclick="showPage('dashboard')">
+                            <span class="menu-icon">📊</span>
+                            <span>Dashboard</span>
+                        </div>
+                        <div class="menu-item" onclick="showPage('events')">
+                            <span class="menu-icon">🎪</span>
+                            <span>Events</span>
+                        </div>
+                        <div class="menu-item" onclick="showPage('registrations')">
+                            <span class="menu-icon">📝</span>
+                            <span>Registrations</span>
+                        </div>
+                        <div class="menu-item" onclick="showPage('users')">
+                            <span class="menu-icon">👥</span>
+                            <span>Users</span>
+                        </div>
+                        <div class="menu-item" onclick="showPage('reports')">
+                            <span class="menu-icon">📈</span>
+                            <span>Reports</span>
+                        </div>
+                    </div>
+
+                    <!-- PARTICIPANT MENU -->
+                    <div id="participantMenu" style="display: none; width: 100%;">
+                        <div class="menu-item active" onclick="showPage('myEvents')">
+                            <span class="menu-icon">🎫</span>
+                            <span>My Events</span>
+                        </div>
+                        <div class="menu-item" onclick="showPage('browseEvents')">
+                            <span class="menu-icon">🔍</span>
+                            <span>Browse Events</span>
+                        </div>
+                        <div class="menu-item" onclick="showPage('profile')">
+                            <span class="menu-icon">👤</span>
+                            <span>Profile</span>
+                        </div>
+                        <div class="menu-item" onclick="showPage('certificates')">
+                            <span class="menu-icon">🏆</span>
+                            <span>Certificates</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer" onclick="handleLogout()">
+                    <span class="menu-icon">🚪</span>
+                    <span>Logout</span>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <div class="top-bar">
+                    <div class="greeting">
+                        Good evening, <span class="username" id="userGreeting">User</span>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                    </div>
+                </div>
+
+                <div class="content-area">
+                    <!-- ADMIN PAGES -->
+                    <div id="dashboard-page" class="page-content">
+                        <h2 class="section-title">Dashboard Overview</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Events</div>
+                                <div class="stat-value">4</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Total Users</div>
+                                <div class="stat-value">8</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Total Registrations</div>
+                                <div class="stat-value">5</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Total Revenue</div>
+                                <div class="stat-value">$5,495</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3 class="section-title">Recent Events</h3>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Event Name</th>
+                                            <th>Date</th>
+                                            <th>Registrations</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Tech Summit 2026</strong></td>
+                                            <td>June 20, 2026</td>
+                                            <td>120</td>
+                                            <td><span class="badge published">Published</span></td>
+                                            <td><button class="action-btn">View</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Startup Bootcamp</strong></td>
+                                            <td>July 10, 2026</td>
+                                            <td>60</td>
+                                            <td><span class="badge published">Published</span></td>
+                                            <td><button class="action-btn">View</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Design Meetup</strong></td>
+                                            <td>May 28, 2026</td>
+                                            <td>55</td>
+                                            <td><span class="badge published">Published</span></td>
+                                            <td><button class="action-btn">View</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="events-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">Manage Events</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Event Name</th>
+                                        <th>Organizer</th>
+                                        <th>Date</th>
+                                        <th>Capacity</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Tech Summit 2026</strong></td>
+                                        <td>Tech Guild</td>
+                                        <td>June 20, 2026</td>
+                                        <td>300</td>
+                                        <td><span class="badge published">Published</span></td>
+                                        <td><button class="action-btn">Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Startup Bootcamp</strong></td>
+                                        <td>Innovation Hub</td>
+                                        <td>July 10, 2026</td>
+                                        <td>150</td>
+                                        <td><span class="badge published">Published</span></td>
+                                        <td><button class="action-btn">Edit</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="registrations-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">All Registrations</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Registration #</th>
+                                        <th>Event</th>
+                                        <th>Participant</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>REG202605051001</strong></td>
+                                        <td>Tech Summit 2026</td>
+                                        <td>John Doe</td>
+                                        <td>john@example.com</td>
+                                        <td><span class="badge success">Confirmed</span></td>
+                                        <td>$999</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>REG202605051002</strong></td>
+                                        <td>Startup Bootcamp</td>
+                                        <td>Jane Smith</td>
+                                        <td>jane@example.com</td>
+                                        <td><span class="badge pending">Pending</span></td>
+                                        <td>$1,499</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="users-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">Manage Users</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Events</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Admin User</strong></td>
+                                        <td>rajuchaswik@gmail.com</td>
+                                        <td>Admin</td>
+                                        <td>—</td>
+                                        <td><span class="badge success">Active</span></td>
+                                        <td><button class="action-btn">Manage</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>John Participant</strong></td>
+                                        <td>p1@events.local</td>
+                                        <td>Participant</td>
+                                        <td>2</td>
+                                        <td><span class="badge success">Active</span></td>
+                                        <td><button class="action-btn">Manage</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="reports-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">Reports & Analytics</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Revenue</div>
+                                <div class="stat-value">$5,495</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Avg. Registration</div>
+                                <div class="stat-value">1,099</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Conversion Rate</div>
+                                <div class="stat-value">65%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Pending Payments</div>
+                                <div class="stat-value">$1,499</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PARTICIPANT PAGES -->
+                    <div id="myEvents-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">My Registered Events</h2>
+                        <div class="registrations-grid">
+                            <div class="registration-card">
+                                <div class="event-title">Tech Summit 2026</div>
+                                <div class="event-detail">📍 Bengaluru, India</div>
+                                <div class="event-detail">📅 June 20, 2026</div>
+                                <div class="event-detail">⏰ 09:00 AM - 5:30 PM</div>
+                                <div class="reg-number">REG202605051001</div>
+                                <div class="qr-code-display">[QR Code]</div>
+                            </div>
+                            <div class="registration-card">
+                                <div class="event-title">Startup Bootcamp</div>
+                                <div class="event-detail">📍 Mumbai, India</div>
+                                <div class="event-detail">📅 July 10-11, 2026</div>
+                                <div class="event-detail">⏰ 10:00 AM - 4:00 PM</div>
+                                <div class="reg-number">REG202605051002</div>
+                                <div class="qr-code-display">[QR Code]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="browseEvents-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">Browse Available Events</h2>
+                        <div class="registrations-grid">
+                            <div class="registration-card">
+                                <div class="event-title">Design Thinking Meetup</div>
+                                <div class="event-detail">📍 Pune, India</div>
+                                <div class="event-detail">📅 May 28, 2026</div>
+                                <div class="event-detail">💰 Free</div>
+                                <button class="action-btn" style="width: 100%; margin-top: 15px;">Register Now</button>
+                            </div>
+                            <div class="registration-card">
+                                <div class="event-title">AI Hack Night</div>
+                                <div class="event-detail">📍 Hyderabad, India</div>
+                                <div class="event-detail">📅 August 2, 2026</div>
+                                <div class="event-detail">💰 $499</div>
+                                <button class="action-btn" style="width: 100%; margin-top: 15px;">Register Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="profile-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">My Profile</h2>
+                        <div class="stat-card" style="max-width: 500px;">
+                            <div class="event-detail" style="margin-bottom: 15px;">
+                                <strong>Name:</strong> John Participant
+                            </div>
+                            <div class="event-detail" style="margin-bottom: 15px;">
+                                <strong>Email:</strong> p1@events.local
+                            </div>
+                            <div class="event-detail" style="margin-bottom: 15px;">
+                                <strong>Phone:</strong> +1 (555) 123-4567
+                            </div>
+                            <div class="event-detail" style="margin-bottom: 15px;">
+                                <strong>Organization:</strong> Tech Innovators
+                            </div>
+                            <div class="event-detail">
+                                <strong>Member Since:</strong> January 15, 2026
+                            </div>
+                            <button class="action-btn" style="width: 100%; margin-top: 20px;">Edit Profile</button>
+                        </div>
+                    </div>
+
+                    <div id="certificates-page" class="page-content" style="display: none;">
+                        <h2 class="section-title">My Certificates</h2>
+                        <div class="registrations-grid">
+                            <div class="registration-card">
+                                <div class="event-title">Tech Summit 2026</div>
+                                <div class="event-detail">✅ Completed</div>
+                                <div class="event-detail">Earned: June 20, 2026</div>
+                                <button class="action-btn" style="width: 100%; margin-top: 15px;">Download PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let currentRole = 'admin';
+
+        function selectRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-option').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            // Validate credentials
+            const validCredentials = {
+                'admin': { email: 'rajuchaswik@gmail.com', password: 'Raju@2006', name: 'Admin User' },
+                'participant': { email: 'p1@events.local', password: 'password123', name: 'John Participant' }
+            };
+
+            const credentials = validCredentials[currentRole];
+
+            if (email === credentials.email && password === credentials.password) {
+                currentUser = { 
+                    email: email, 
+                    role: currentRole, 
+                    name: credentials.name 
+                };
+
+                // Update UI
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').classList.add('active');
+                document.getElementById('userGreeting').textContent = credentials.name.split(' ')[0];
+                document.getElementById('userAvatar').textContent = credentials.name[0];
+
+                // Show appropriate menu
+                if (currentRole === 'admin') {
+                    document.getElementById('adminMenu').style.display = 'block';
+                    document.getElementById('participantMenu').style.display = 'none';
+                } else {
+                    document.getElementById('adminMenu').style.display = 'none';
+                    document.getElementById('participantMenu').style.display = 'block';
+                }
+
+                showPage(currentRole === 'admin' ? 'dashboard' : 'myEvents');
+            } else {
+                alert('❌ Invalid credentials. Please check your email and password.');
+            }
+        }
+
+        function showPage(page) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(p => p.style.display = 'none');
+            
+            // Show selected page
+            const pageEl = document.getElementById(`${page}-page`);
+            if (pageEl) {
+                pageEl.style.display = 'block';
+            }
+
+            // Update active menu
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            const menuItem = event.target.closest('.menu-item');
+            if (menuItem) {
+                menuItem.classList.add('active');
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('dashboardPage').classList.remove('active');
+                document.getElementById('emailInput').value = '';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        // Set default login for demo
+        window.addEventListener('load', () => {
+            document.getElementById('emailInput').value = 'rajuchaswik@gmail.com';
+            document.getElementById('passwordInput').value = 'Raju@2006';
+        });
+    </script>
+</body>
+</html>
